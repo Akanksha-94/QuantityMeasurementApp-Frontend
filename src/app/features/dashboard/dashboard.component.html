@@ -1,0 +1,32 @@
+<div class="dashboard">
+  <h1>Quantity Measurement Dashboard</h1>
+
+  <div *ngIf="!(isAuthenticated$ | async); else authenticated">
+    <p>Welcome! Please <a routerLink="/login">login</a> or <a routerLink="/register">register</a> to access all
+      features.</p>
+  </div>
+
+  <ng-template #authenticated>
+    <div class="operations">
+      <h2>Operations</h2>
+      <ul>
+        <li><a routerLink="/operations/compare">Compare Quantities</a></li>
+        <li><a routerLink="/operations/convert">Convert Quantities</a></li>
+        <li><a routerLink="/operations/add">Add Quantities</a></li>
+        <li><a routerLink="/operations/subtract">Subtract Quantities</a></li>
+        <li><a routerLink="/operations/divide">Divide Quantities</a></li>
+      </ul>
+    </div>
+
+    <div class="history">
+      <h2>History</h2>
+      <ul>
+        <li><a routerLink="/history/operation">Operation History</a></li>
+        <li><a routerLink="/history/type">Type History</a></li>
+        <li><a routerLink="/history/errors">Error History</a></li>
+      </ul>
+    </div>
+
+    <button (click)="logout()">Logout</button>
+  </ng-template>
+</div>

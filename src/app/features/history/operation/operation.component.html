@@ -1,0 +1,26 @@
+<div class="history-container">
+  <h2>Operation History</h2>
+  <div class="filter">
+    <label for="operation">Select Operation:</label>
+    <select id="operation" [(ngModel)]="selectedOperation" (change)="onOperationChange()">
+      <option *ngFor="let op of operations" [value]="op">{{ op }}</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <div *ngIf="!loading && !errorMessage" class="history-list">
+    <div *ngIf="history.length === 0" class="empty">No history found.</div>
+    <div *ngFor="let item of history" class="history-item">
+      <p><strong>Operation:</strong> {{ item.operation }}</p>
+      <p><strong>This:</strong> {{ item.thisValue }} {{ item.thisUnit }} ({{ item.thisMeasurementType }})</p>
+      <p *ngIf="item.thatValue"><strong>That:</strong> {{ item.thatValue }} {{ item.thatUnit }} ({{
+        item.thatMeasurementType }})</p>
+      <p *ngIf="item.resultString"><strong>Result:</strong> {{ item.resultString }}</p>
+      <p *ngIf="item.resultValue"><strong>Result:</strong> {{ item.resultValue }} {{ item.resultUnit }}</p>
+      <p *ngIf="item.errorMessage" class="error">{{ item.errorMessage }}</p>
+      <p><strong>Created:</strong> {{ item.createdAt | date:'medium' }}</p>
+    </div>
+  </div>
+</div>

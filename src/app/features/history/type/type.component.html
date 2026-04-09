@@ -1,0 +1,22 @@
+<div class="type-history-container">
+  <h2>History by Type</h2>
+  <div class="filter">
+    <label for="typeSelect">Select Type:</label>
+    <select id="typeSelect" [(ngModel)]="selectedType" (change)="onTypeChange()">
+      <option *ngFor="let type of measurementTypes" [value]="type">{{ type }}</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <div *ngIf="!loading && !errorMessage" class="history-list">
+    <div *ngIf="history.length === 0" class="empty">No history found for this type.</div>
+    <div *ngFor="let item of history" class="history-item">
+      <p><strong>Operation:</strong> {{ item.operation }}</p>
+      <p><strong>Result:</strong> {{ item.resultValue }} {{ item.resultUnit }}</p>
+      <p><strong>Created:</strong> {{ item.createdAt | date:'medium' }}</p>
+      <p *ngIf="item.error"><strong>Error:</strong> {{ item.errorMessage }}</p>
+    </div>
+  </div>
+</div>

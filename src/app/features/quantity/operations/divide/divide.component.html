@@ -1,0 +1,52 @@
+<div class="divide-container">
+  <h2>Divide Quantities</h2>
+  <form [formGroup]="divideForm" (ngSubmit)="onSubmit()">
+    <div class="quantity-group">
+      <h3>Dividend</h3>
+      <div class="form-group">
+        <label for="thisValue">Value</label>
+        <input type="number" id="thisValue" formControlName="thisValue" required>
+      </div>
+      <div class="form-group">
+        <label for="thisUnit">Unit</label>
+        <input type="text" id="thisUnit" formControlName="thisUnit" required>
+      </div>
+      <div class="form-group">
+        <label for="thisType">Type</label>
+        <select id="thisType" formControlName="thisType">
+          <option *ngFor="let type of measurementTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="quantity-group">
+      <h3>Divisor</h3>
+      <div class="form-group">
+        <label for="thatValue">Value</label>
+        <input type="number" id="thatValue" formControlName="thatValue" required>
+        <div *ngIf="divideForm.get('thatValue')?.hasError('zeroValue')" class="error">Cannot divide by zero.</div>
+      </div>
+      <div class="form-group">
+        <label for="thatUnit">Unit</label>
+        <input type="text" id="thatUnit" formControlName="thatUnit" required>
+      </div>
+      <div class="form-group">
+        <label for="thatType">Type</label>
+        <select id="thatType" formControlName="thatType">
+          <option *ngFor="let type of measurementTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="loading || divideForm.invalid">Divide</button>
+  </form>
+
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <div *ngIf="result" class="result">
+    <h3>Result</h3>
+    <p *ngIf="result.error">{{ result.errorMessage }}</p>
+    <p *ngIf="!result.error">{{ result.resultValue }} {{ result.resultUnit }}</p>
+    <p>Created: {{ result.createdAt | date:'medium' }}</p>
+  </div>
+</div>
