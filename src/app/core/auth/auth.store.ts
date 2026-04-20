@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { JwtAuthenticationResponse } from '../models/api.models';
 
@@ -34,7 +35,7 @@ export class AuthStoreService {
     return this.isAuthenticatedSubject.value;
   }
 
-  constructor() {
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {
     this.restoreAuthFromStorage();
   }
 
@@ -44,7 +45,9 @@ export class AuthStoreService {
     this.usernameSubject.next(auth.username);
     this.isAuthenticatedSubject.next(true);
 
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(auth));
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(auth));
+    }
   }
 
   clearAuth(): void {
@@ -53,10 +56,13 @@ export class AuthStoreService {
     this.usernameSubject.next(null);
     this.isAuthenticatedSubject.next(false);
 
-    localStorage.removeItem(this.STORAGE_KEY);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem(this.STORAGE_KEY);
+    }
   }
 
   restoreAuthFromStorage(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
     const stored = localStorage.getItem(this.STORAGE_KEY);
     if (stored) {
       try {
